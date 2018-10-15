@@ -51,7 +51,7 @@
 
         <div class="w3-right" style="padding-right: 150px;">
             <p>
-                <jsp:getProperty name="login" property="nome_usuario" />
+                ${login.nome_usuario}
             </p>
             <br>
 

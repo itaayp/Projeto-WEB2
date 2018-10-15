@@ -50,6 +50,43 @@ public class ClientesServlet extends HttpServlet {
             LoginBean loginBean = (LoginBean) session.getAttribute("login");
            
             if(loginBean != null) {
+                String action = request.getParameter("action");
+                if(action.equals("list") || action == null) {
+                
+                } else if (action.equals("show")) {
+                
+                } else if(action.equals("formUpdate")){
+                
+                } else if (action.equals("remove")){
+                    
+                } else if (action.equals("update")){
+                    
+                } else if (action.equals("formNew")){
+                    
+                } else if (action.equals("new")){
+                    
+                } else if (action.equals("")) {
+                    // insere
+                    RequestDispatcher rd = getServletContext().getRequestDispatcher("/mensagem.jsp");
+
+                    rd.forward(request, response);
+                } else if (action.equals("pesquisar")) {
+                    // pesquisa
+                    RequestDispatcher rd = getServletContext().
+
+                    getRequestDispatcher("/mostrar.jsp");
+
+                    rd.forward(request, response);
+                }
+                else {
+                    RequestDispatcher rd = getServletContext().
+
+                    getRequestDispatcher("/erro.jsp");
+
+                    rd.forward(request, response);
+                }
+                
+                
                 ClienteDAO dao = new ClienteDAO();
                 List<Cliente> clientes = new ArrayList<>();
                 
