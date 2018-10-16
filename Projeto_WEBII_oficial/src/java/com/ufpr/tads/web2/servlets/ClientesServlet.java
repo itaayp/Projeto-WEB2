@@ -8,9 +8,14 @@ package com.ufpr.tads.web2.servlets;
 import com.ufpr.tads.web2.beans.Cliente;
 import com.ufpr.tads.web2.beans.LoginBean;
 import com.ufpr.tads.web2.dao.ClienteDAO;
+import com.ufpr.tads.web2.facade.ClientesFacade;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -50,57 +55,87 @@ public class ClientesServlet extends HttpServlet {
             LoginBean loginBean = (LoginBean) session.getAttribute("login");
            
             if(loginBean != null) {
-                String action = request.getParameter("action");
-                if(action.equals("list") || action == null) {
-                
-                } else if (action.equals("show")) {
-                
-                } else if(action.equals("formUpdate")){
-                
-                } else if (action.equals("remove")){
-                    
-                } else if (action.equals("update")){
-                    
-                } else if (action.equals("formNew")){
-                    
-                } else if (action.equals("new")){
-                    
-                } else if (action.equals("")) {
-                    // insere
-                    RequestDispatcher rd = getServletContext().getRequestDispatcher("/mensagem.jsp");
+                int id;
+                Cliente cliente;
+                List<Cliente> clientes;
+                RequestDispatcher rd;
+                String action = request.getParameter("action");                
 
-                    rd.forward(request, response);
-                } else if (action.equals("pesquisar")) {
-                    // pesquisa
-                    RequestDispatcher rd = getServletContext().
+                if (action != null) {
+                    switch (action) {
+                        case "show":
+                            id = Integer.parseInt(request.getParameter("id"));
+                            cliente = ClientesFacade.buscar(id);
+                            request.setAttribute("visualizar", cliente);
+                            rd = getServletContext().getRequestDispatcher("/clientesVisualizar.jsp");
+                            rd.forward(request, response);
+                            break;
+                        case "formUpdate":
+                            id = Integer.parseInt(request.getParameter("id"));
+                            cliente = ClientesFacade.buscar(id);
+                            request.setAttribute("alterar", cliente);
+                            rd = getServletContext().getRequestDispatcher("/clientesAlterar.jsp");
+                            rd.forward(request, response);
+                            break;
+                        case "remove":
+                            id = Integer.parseInt(request.getParameter("id"));
+                            ClientesFacade.excluir(id);
+                            //rd = getServletContext().getRequestDispatcher("/ClientesServlet");
+                            //rd.forward(request, response);
+                            response.sendRedirect(request.getContextPath() + "/ClientesServlet");
+                            break;
+                        case "update":
+                            cliente = new Cliente();
+                            id = Integer.parseInt(request.getParameter("id"));
+                            cliente.setId_cliente(id);
+                            cliente.setCpf_cliente(request.getParameter("cpf"));
+                            cliente.setNome_cliente(request.getParameter("nome"));
+                            cliente.setEmail_cliente(request.getParameter("email"));
+                            String dataString = request.getParameter("data");
 
-                    getRequestDispatcher("/mostrar.jsp");
+                            cliente.setData_cliente(dataString);
+                            cliente.setCep_cliente(request.getParameter("cep"));
+                            cliente.setRua_cliente(request.getParameter("rua"));
+                            int numero = Integer.parseInt(request.getParameter("nr"));
+                            cliente.setNr_cliente(numero);
+                            cliente.setCidade_cliente(request.getParameter("cidade"));
+                            cliente.setUf_cliente(request.getParameter("uf"));
+                            ClientesFacade.alterar(cliente);
+                            response.sendRedirect(request.getContextPath() + "/ClientesServlet");
+                            break;
+                        case "formNew":
+                            response.sendRedirect(request.getContextPath() + "/clientesNovo.jsp");
+                            break;
+                        case "new":
+                            cliente = new Cliente();
+                            cliente.setNome_cliente(request.getParameter("nome"));
+                            cliente.setCpf_cliente(request.getParameter("cpf"));
+                            cliente.setEmail_cliente(request.getParameter("email"));
+                            String dataS = request.getParameter("data");
 
+                            cliente.setData_cliente(dataS);
+                            cliente.setCep_cliente(request.getParameter("cep"));
+                            cliente.setRua_cliente(request.getParameter("rua"));
+                            int nr = Integer.parseInt(request.getParameter("numero"));
+                            cliente.setNr_cliente(nr);
+                            cliente.setCidade_cliente(request.getParameter("cidade"));
+                            cliente.setUf_cliente(request.getParameter("uf"));
+                            ClientesFacade.inserir(cliente);
+                            response.sendRedirect(request.getContextPath() + "/ClientesServlet");
+                            break;
+                        default:
+                            clientes = ClientesFacade.buscarTodos();
+                            request.setAttribute("listar", clientes);
+                            rd = getServletContext().getRequestDispatcher("/clientesListar.jsp");
+                            rd.forward(request, response);
+                    }
+                } else {
+                    clientes = ClientesFacade.buscarTodos();
+                    request.setAttribute("listar", clientes);
+                    rd = getServletContext().getRequestDispatcher("/clientesListar.jsp");
                     rd.forward(request, response);
                 }
-                else {
-                    RequestDispatcher rd = getServletContext().
-
-                    getRequestDispatcher("/erro.jsp");
-
-                    rd.forward(request, response);
-                }
-                
-                
-                ClienteDAO dao = new ClienteDAO();
-                List<Cliente> clientes = new ArrayList<>();
-                
-                clientes = dao.selectClientes();
-                
-                RequestDispatcher rd = getServletContext().getRequestDispatcher("/clientesListar.jsp");
-                request.setAttribute("clientes", clientes);
-                rd.forward(request, response);
-            } else {
-                RequestDispatcher rd = getServletContext().getRequestDispatcher("/index.jsp");
-                request.setAttribute("msg", "Usuário deve se autenticar para acessar o sistema");
-                rd.forward(request, response);
             }
-            
         }
     }
 
