@@ -33,7 +33,7 @@
 
             
             <%    
-                Cliente clientes = (Cliente) request.getAttribute("cliente");
+                Cliente clientes = (Cliente) request.getAttribute("visualizar");
 
                 out.println("<table>");
                 out.println("<tr>");

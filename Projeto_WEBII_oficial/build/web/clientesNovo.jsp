@@ -35,10 +35,10 @@
             Email: <input type="text" name="email" ><br/>
             Data: <input type="text" name="data" ><br/>
             Rua: <input type="text" name="rua" ><br/>
-            Número: <input type="text" name="numero" ><br/>
+            Número (OBRIGATÓRIO): <input type="text" name="numero" ><br/>
             CEP: <input type="text" name="cep" ><br/>
             Cidade: <input type="text" name="cidade" ><br/>
-            UF: <input type="text" name="uf" ><br/><br/>
+            UF (2 LETRAS): <input type="text" name="uf" ><br/><br/>
             <input type="submit" value="Salvar"> <input type="submit" value="Cancelar" formaction="ClientesServlet">
         </form>
         
