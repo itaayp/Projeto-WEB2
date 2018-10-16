@@ -45,7 +45,7 @@
 
         <div class="w3-right" style="padding-right: 250px;">
             <p>
-                <c:out value="${login.nome}"/>
+                <c:out value="${login.nome_usuario}"/>
             </p>
             <br/>
             
