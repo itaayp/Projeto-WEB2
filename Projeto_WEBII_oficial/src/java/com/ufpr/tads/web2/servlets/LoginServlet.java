@@ -9,7 +9,7 @@ package com.ufpr.tads.web2.servlets;
 import com.ufpr.tads.web2.beans.Usuario;
 import Connection.UsuarioDAO;
 import com.ufpr.tads.web2.beans.LoginBean;
-import static com.oracle.webservices.internal.api.message.MessageContextFactory.create;
+//import static com.oracle.webservices.internal.api.message.MessageContextFactory.create;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;

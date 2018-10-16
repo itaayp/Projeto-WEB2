@@ -4,7 +4,10 @@
     Author     : Itay
 --%>
 
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@page errorPage="/erro.jsp"%>
 <%@page import="com.ufpr.tads.web2.beans.Cliente"%>
+<%@page import="java.util.List"%>
 <%@page import="com.ufpr.tads.web2.beans.LoginBean"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -16,17 +19,17 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <%
-            LoginBean loginBean = (LoginBean) session.getAttribute("login");
-            if(loginBean == null){
-                RequestDispatcher rd = getServletContext().getRequestDispatcher("/index.jsp");
-                request.setAttribute("msg", "Usuário deve se autenticar para acessar o sistema");
-                rd.forward(request, response);
-            }
-        %>
+        <jsp:useBean id="login" class="com.ufpr.tads.web2.beans.LoginBean" scope="session"/>
+
+        <c:if test="${empty sessionScope.login}">
+            <jsp:forward page="/index.jsp">
+                <jsp:param name="msg" value="Usuário deve se autenticar para acessar o sistema"/>
+            </jsp:forward>
+        </c:if>
+        
         <h1>Dados do cliente</h1>
         
-        <form action="NovoClienteServlet" method="POST">
+        <form action="ClientesServlet?action=new" method="POST">
             Nome: <input type="text" name="nome" > <br/>
             CPF: <input type="text" name="cpf" ><br/>
             Email: <input type="text" name="email" ><br/>

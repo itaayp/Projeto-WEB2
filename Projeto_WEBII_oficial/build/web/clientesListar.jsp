@@ -54,23 +54,24 @@
                     <th>Nome</th>
                     <th>CPF</th>
                     <th>Email</th>
-                    <th colspan=\"3\">Ações</th>
+                    <th colspan="3">Ações</th>
                 </tr>
           
                 <c:forEach items="${listar}" var="cliente">  
-                    out.println("<tr>");
-                    out.println("<td>" + clientes.get(i).getNome_cliente() + "</td>");  
-                    out.println("<td>" + clientes.get(i).getCpf_cliente() + "</td>"); 
-                    out.println("<td>" + clientes.get(i).getEmail_cliente() + "</td>");
-                    out.println("<td> <a href=\"ClientesServlet?action=show&id="+ clientes.get(i).getId_cliente() +"\"><img src=\"Imagens/view.jpg\" height=\"25\" width=\"25px\"></a></td>");
-                    out.println("<td> <a href=\"ClientesServlet?action=formUpdate&id="+ clientes.get(i).getId_cliente() +"\"><img src=\"Imagens/update.png\" height=\"25\" width=\"25px\"></a></td>");
-                    out.println("<td> <a href=\"ClientesServlet?action=remove&id="+ clientes.get(i).getId_cliente() +"\"><img src=\"Imagens/remove.png\" height=\"25\" width=\"25px\"></a></td>");
-                    out.println("</tr>");
+                    
+                    <tr>
+                    <td> ${cliente.nome_cliente} </td> 
+                    <td> ${cliente.cpf_cliente} </td> 
+                    <td> ${cliente.email_cliente} </td>
+                    <td> <a href="ClientesServlet?action=show&id=${cliente.id_cliente}"><img src="Imagens/view.jpg" height="25" width="25px"></a></td>
+                    <td> <a href="ClientesServlet?action=formUpdate&id=${cliente.id_cliente}"><img src="Imagens/update.png" height="25" width="25px"></a></td>
+                    <td> <a href="ClientesServlet?action=remove&id=${cliente.id_cliente}"><img src="Imagens/remove.png" height="25" width="25px"></a></td>
+                    </tr>
                 </c:forEach>
             </table>
             
             <br>
-            <a href="FormNovoClienteServlet"  style="color: darkblue">Novo</a> |
+            <a href="ClientesServlet?action=formNew"  style="color: darkblue">Novo</a> |
             <a href ='LogoutServlet' style="color: darkblue">Encerrar sessão</a>
 
             <div class="w3-light-grey w3-container w3-padding-32" style="margin-top:75px;padding-right:58px">
