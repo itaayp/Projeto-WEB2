@@ -4,9 +4,11 @@
     Author     : Itay
 --%>
 
-<%@page import="com.ufpr.tads.web2.beans.LoginBean"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@page errorPage="/erro.jsp"%>
 <%@page import="com.ufpr.tads.web2.beans.Cliente"%>
 <%@page import="java.util.List"%>
+<%@page import="com.ufpr.tads.web2.beans.LoginBean"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -24,15 +26,13 @@
     </head>
     <body>
         <jsp:useBean id="login" class="com.ufpr.tads.web2.beans.LoginBean" scope="session"/>
-        <%
-            LoginBean loginBean = (LoginBean) session.getAttribute("login");
-            if(loginBean == null){
-                RequestDispatcher rd = getServletContext().getRequestDispatcher("/index.jsp");
-                request.setAttribute("msg",  "Usuário deve se autenticar para acessar o sistema");
-                rd.forward(request, response);
-            }
-        %>
 
+        <c:if test="${empty sessionScope.login}">
+            <jsp:forward page="/index.jsp">
+                <jsp:param name="msg" value="Usuário deve se autenticar para acessar o sistema"/>
+            </jsp:forward>
+        </c:if>
+        
         <nav class="w3-sidebar w3-black w3-collapse w3-top w3-large w3-padding" style="z-index:3;width:300px;font-weight:bold;" id="mySidebar"><br>
           <div class="w3-container">
             <h3 class="w3-padding-64"><b>Menu</b></h3>
@@ -45,34 +45,30 @@
 
         <div class="w3-right" style="padding-right: 250px;">
             <p>
-                <jsp:getProperty name="login" property="nome_usuario" />
+                <c:out value="${login.nome}"/>
             </p>
             <br/>
             
-            <%    
-                List<Cliente> clientes = (List<Cliente>) request.getAttribute("clientes");
-
-                out.println("<table>");
-                out.println("<tr>");
-                out.println("<th>Nome</th>");
-                out.println("<th>CPF</th>");
-                out.println("<th>Email</th>");
-                out.println("<th colspan=\"3\">Ações</th>");
-                out.println("</tr>");
-
-                for(int i = 0; i < clientes.size(); i++){  
+            <table>
+                <tr>
+                    <th>Nome</th>
+                    <th>CPF</th>
+                    <th>Email</th>
+                    <th colspan=\"3\">Ações</th>
+                </tr>
+          
+                <c:forEach items="${listar}" var="cliente">  
                     out.println("<tr>");
                     out.println("<td>" + clientes.get(i).getNome_cliente() + "</td>");  
                     out.println("<td>" + clientes.get(i).getCpf_cliente() + "</td>"); 
                     out.println("<td>" + clientes.get(i).getEmail_cliente() + "</td>");
-                    out.println("<td> <a href=\"VisualizarClienteServlet?id="+ clientes.get(i).getId_cliente() +"\"><img src=\"Imagens/view.jpg\" height=\"25\" width=\"25px\"></a></td>");
-                    out.println("<td> <a href=\"FormAlterarClienteServlet?id="+ clientes.get(i).getId_cliente() +"\"><img src=\"Imagens/update.png\" height=\"25\" width=\"25px\"></a></td>");
-                    out.println("<td> <a href=\"RemoverClienteServlet?id="+ clientes.get(i).getId_cliente() +"\"><img src=\"Imagens/remove.png\" height=\"25\" width=\"25px\"></a></td>");
+                    out.println("<td> <a href=\"ClientesServlet?action=show&id="+ clientes.get(i).getId_cliente() +"\"><img src=\"Imagens/view.jpg\" height=\"25\" width=\"25px\"></a></td>");
+                    out.println("<td> <a href=\"ClientesServlet?action=formUpdate&id="+ clientes.get(i).getId_cliente() +"\"><img src=\"Imagens/update.png\" height=\"25\" width=\"25px\"></a></td>");
+                    out.println("<td> <a href=\"ClientesServlet?action=remove&id="+ clientes.get(i).getId_cliente() +"\"><img src=\"Imagens/remove.png\" height=\"25\" width=\"25px\"></a></td>");
                     out.println("</tr>");
-                }
-
-                out.println("</table>");
-            %>
+                </c:forEach>
+            </table>
+            
             <br>
             <a href="FormNovoClienteServlet"  style="color: darkblue">Novo</a> |
             <a href ='LogoutServlet' style="color: darkblue">Encerrar sessão</a>
